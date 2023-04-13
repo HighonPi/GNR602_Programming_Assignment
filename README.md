@@ -18,3 +18,8 @@ The inverted projection is then rescaled and multiplied by the principal compone
 Finally, the data is reshaped into an RGB image and saved to a file.
 
 The resulting image is a pansharpened image that combines the high spatial resolution of the panchromatic image with the spectral information of the multispectral image, resulting in a high-resolution, full-color image.
+
+## Instructions to run the code
+1. First run MStoRGB.py to get the rgb bands out of the multispectral geotiff. 
+2. Run PANtoGray.py to convert the  panchromatic geotiff to a grayscale png.
+3. Run pansharpen.m.
