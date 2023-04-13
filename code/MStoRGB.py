@@ -1,9 +1,14 @@
 from osgeo import gdal
 import numpy as np
 from PIL import Image
+import sys
+
+if len(sys.argv) != 3:
+    print("Run as 'python MStoRGB.py [path of geotiff] [output file name]'")
+    exit(0)
 
 # Open the GeoTIFF file
-src = gdal.Open("ms.tif")
+src = gdal.Open(sys.argv[1])
 
 # Get the RGB bands (bands 1, 2, and 3)
 red_band = src.GetRasterBand(1).ReadAsArray()
@@ -18,4 +23,4 @@ rgb = (rgb / 8).astype(np.uint8)
 image = Image.fromarray(rgb, 'RGB')
 
 # Save the image to disk
-image.save("rgb_image.png")
+image.save(sys.argv[2])
