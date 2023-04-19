@@ -40,16 +40,18 @@ pan_bands = pan_src.RasterCount
 pan_img = pan_src.ReadAsArray()
 
 ms_img = util.resize_image(ms_img, pan_img.shape[0], pan_img.shape[1])
-
+## Performing PCA on MS image (built our custom pca function)
 pcs, eigs = util.pca_image(ms_img) 
-
 x = pcs
+## Luminosity histogram matching for the panchromatic image as part of Contrast adjustment
 pan_adjusted = (pan_img - pan_img.mean()) * (np.std(x) / pan_img.std()) + x.mean()
+## Replacing the first component
 x[:,:,0] = pan_adjusted
-
+## Inverse PCA transform to get back an improved MS image
 pan_sharpened = util.inverse_pca_image(x, eigs)
-
+## Clipping the image to 0-255
 pan_sharpened = np.clip(pan_sharpened, np.iinfo(dtype).min, np.iinfo(dtype).max)
+## Converting floating pt. numbers to integer values in the pan sharpened image
 pan_sharpened = pan_sharpened.astype(dtype)
 
 util.write_geotiff(pan_sharpened, "pansharpened.tif", ms_src.GetGeoTransform(), ms_src.GetProjection(), dtype)
